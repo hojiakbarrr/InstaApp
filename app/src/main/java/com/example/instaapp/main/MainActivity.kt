@@ -18,6 +18,11 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initial()
@@ -59,22 +64,22 @@ class MainActivity : AppCompatActivity() {
         // Configure Query
 
         */
-        val soccerPlayers = ParseObject("SoccerPlayers")
-        // Store an object
-        soccerPlayers.put("playerName", "A. Wed")
-        soccerPlayers.put("yearOfBirth", 1997)
-        soccerPlayers.put("emailContact", "a.wed@email.io")
-        soccerPlayers.addAllUnique("attributes", Arrays.asList("fast", "good conditioning"))
-        // Saving object
-        soccerPlayers.saveInBackground(object : SaveCallback {
-            override fun done(e: ParseException?) {
-                if (e == null) {
-                    // Success
-                } else {
-                    // Error
-                }
-            }
-        })
+//        val soccerPlayers = ParseObject("SoccerPlayers")
+//        // Store an object
+//        soccerPlayers.put("playerName", "A. Wed")
+//        soccerPlayers.put("yearOfBirth", 1997)
+//        soccerPlayers.put("emailContact", "a.wed@email.io")
+//        soccerPlayers.addAllUnique("attributes", Arrays.asList("fast", "good conditioning"))
+//        // Saving object
+//        soccerPlayers.saveInBackground(object : SaveCallback {
+//            override fun done(e: ParseException?) {
+//                if (e == null) {
+//                    // Success
+//                } else {
+//                    // Error
+//                }
+//            }
+//        })
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
         /*изменение или обновление

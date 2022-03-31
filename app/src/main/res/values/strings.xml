@@ -14,5 +14,7 @@
     <string name="back4app_client_key">Jki4xERpHGi8OWwHDTS0snXzsYRJmwnBNbHKDvMh</string>
     <string name="REST_API_key">uXsIYlcjLJM3Vtv7PzHuU3j6lqt2JH5dMUOFcXsc</string>
 
+    <string name="PREF_key">SHARED_PREF</string>
+
 
 </resources>
