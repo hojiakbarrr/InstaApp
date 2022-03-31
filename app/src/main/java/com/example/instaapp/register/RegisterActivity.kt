@@ -16,6 +16,11 @@ class RegisterActivity : AppCompatActivity() {
     }
     lateinit var preferences: SharedPreferences
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
