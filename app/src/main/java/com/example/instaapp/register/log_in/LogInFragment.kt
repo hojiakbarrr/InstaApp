@@ -55,7 +55,7 @@ class LogInFragment : Fragment() {
                 if (e == null) {
 
                     toast("C возвращением")
-                    editor.putInt("AGE",10)
+                    editor.putString("AGE", userName.toString())
                     editor.apply()
                     val intent = Intent(requireContext(), MainActivity::class.java)
                     startActivity(intent)

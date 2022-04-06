@@ -1,14 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".main.add.AddPostFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/edit_Post_title"
+            android:layout_width="355dp"
+            android:layout_height="61dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="Post title"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/edit_post_desc"
+            android:layout_width="350dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="28dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Post description"
+            app:layout_constraintEnd_toEndOf="@+id/edit_Post_title"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/edit_Post_title"
+            app:layout_constraintTop_toBottomOf="@+id/edit_Post_title" />
+
+        <Button
+            android:id="@+id/pick_image_btn"
+            android:layout_width="365dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="28dp"
+            android:backgroundTint="#D83B3B"
+            android:text="Pick Image"
+            app:layout_constraintEnd_toEndOf="@+id/edit_post_desc"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toStartOf="@+id/edit_post_desc"
+            app:layout_constraintTop_toBottomOf="@+id/edit_post_desc" />
+
+        <Button
+            android:id="@+id/pick_locat_btn"
+            android:layout_width="365dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#D83B3B"
+            android:text="Pick Location"
+            app:layout_constraintEnd_toEndOf="@+id/edit_post_desc"
+            app:layout_constraintHorizontal_bias="0.666"
+            app:layout_constraintStart_toStartOf="@+id/edit_post_desc"
+            app:layout_constraintTop_toBottomOf="@+id/post_image" />
+
+        <Button
+            android:id="@+id/creat_btn"
+            android:layout_width="365dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#D83B3B"
+            android:text="Create Post"
+            app:layout_constraintEnd_toEndOf="@+id/edit_post_desc"
+            app:layout_constraintHorizontal_bias="0.666"
+            app:layout_constraintStart_toStartOf="@+id/edit_post_desc"
+            app:layout_constraintTop_toBottomOf="@+id/location_txt" />
+
+        <ImageView
+            android:id="@+id/post_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_launcher_foreground"
+            app:layout_constraintEnd_toEndOf="@+id/pick_image_btn"
+            app:layout_constraintHorizontal_bias="0.486"
+            app:layout_constraintStart_toStartOf="@+id/pick_image_btn"
+            app:layout_constraintTop_toBottomOf="@+id/pick_image_btn" />
+
+        <TextView
+            android:id="@+id/location_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Location"
+            app:layout_constraintEnd_toEndOf="@+id/pick_locat_btn"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="@+id/pick_locat_btn"
+            app:layout_constraintTop_toBottomOf="@+id/pick_locat_btn" />
+
+
+        <TextView
+            android:layout_width="85dp"
+            android:layout_height="147dp"
+            android:layout_marginTop="72dp"
+            android:layout_marginEnd="108dp"
+            android:text="sdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+            app:layout_constraintEnd_toEndOf="@+id/creat_btn"
+            app:layout_constraintTop_toBottomOf="@+id/creat_btn" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</ScrollView>

@@ -1,12 +1,12 @@
 package com.example.instaapp.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.instaapp.R
 import com.example.instaapp.adapters.PagerAdapter
 import com.example.instaapp.databinding.ActivityMainBinding
+import com.example.instaapp.model.Post
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.parse.*
@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         * */
+
 
         /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -168,6 +169,7 @@ class MainActivity : AppCompatActivity() {
 
         })
     }
-
-
 }
+
+
+

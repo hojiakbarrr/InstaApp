@@ -26,10 +26,9 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
         preferences = getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
 
-        val age = preferences.getInt("AGE",0)
-        if (age > 0){
+        val age = preferences.getString("AGE","")
+        if (age?.isNotEmpty() == true){
             startActivity(Intent(this,MainActivity::class.java))
         }
-
     }
 }
