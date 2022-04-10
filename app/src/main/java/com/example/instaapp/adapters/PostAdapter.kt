@@ -33,7 +33,7 @@ class PostAdapter(var postList: List<Post>, var context: Context) :
         holder.card_location.text = postList[position].location
         holder.card_description.text = postList[position].description
         holder.card_title.text = postList[position].title
-        Picasso.get().load(postList[position].imageUrl).into(holder.card_image)
+        Picasso.get().load(postList[position].image?.url).into(holder.card_image)
     }
 
     override fun getItemCount(): Int {
@@ -53,10 +53,10 @@ class PostAdapter(var postList: List<Post>, var context: Context) :
             card_description = itemView.findViewById(R.id.card_description)
             card_image = itemView.findViewById(R.id.card_image)
 
-            itemView.setOnClickListener { view ->
-                val position = adapterPosition
-                listener!!.onItemClick(position)
-            }
+//            itemView.setOnClickListener { view ->
+//                val position = adapterPosition
+//                listener!!.onItemClick(position)
+//            }
         }
     }
 

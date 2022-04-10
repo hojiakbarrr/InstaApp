@@ -1,5 +1,6 @@
 package com.example.instaapp.main.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +8,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.instaapp.adapters.PostAdapter
+import com.example.instaapp.api.RetrofitBuilder
 import com.example.instaapp.databinding.FragmentHomeBlankBinding
 import com.example.instaapp.model.Post
+import com.example.instaapp.model.PostResponse
+import com.example.instaapp.utils.toImage
+import com.example.instaapp.utils.toast
 import com.parse.ParseObject
 import com.parse.ParseQuery
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class HomeFragment : Fragment() {
@@ -31,13 +39,18 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
+        binding.swipeLayout.setOnRefreshListener {
+//                        loadPost()
+            getRetrofitPost()
+            binding.swipeLayout.isRefreshing = false
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        preparRec()
-        loadPost()
+        getRetrofitPost()
+//        loadPost()
     }
 
     private fun loadPost() {
@@ -53,30 +66,53 @@ class HomeFragment : Fragment() {
                         post.description = (`object`!!.getString("description"))
                         post.title = (`object`.getString("title"))
                         post.location = (`object`.getString("location"))
-                        val file = `object`.getParseFile("image")
+
+                        post.image = `object`.getParseFile("image")?.toImage()
+
+                        /*до ретрофита
+                          val file = `object`.getParseFile("image")
                         post.imageUrl = file!!.url
+                         */
+
                         postList.add(post)
                     }
                     adapter = PostAdapter(postList, requireContext())
                     binding.recHome.adapter = adapter
-                    binding.swipeLayout.setOnRefreshListener {
-                        loadPost()
-                        adapter?.notifyDataSetChanged()
-                        binding.swipeLayout.isRefreshing = false
-                    }
+
                 }
             }
         }
 
     }
 
-    private fun preparRec() {
+    private fun getRetrofitPost() {
         binding.recHome.apply {
-            layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = AdapterPost
+            postList.clear()
+            val response = RetrofitBuilder.api.getAllPosts()
+            response.enqueue(object : Callback<PostResponse> {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<PostResponse>,
+                    response: Response<PostResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        postList = response.body()?.results as ArrayList<Post>
+                        adapter = PostAdapter(postList,requireContext())
+                        adapter?.notifyDataSetChanged()
+
+                    }
+                }
+
+                override fun onFailure(call: Call<PostResponse>, t: Throwable) {
+                    toast("проблемы с подкгрузкой")
+                }
+
+            })
+            binding.swipeLayout.isRefreshing = false
         }
+
     }
-
-
 
 }

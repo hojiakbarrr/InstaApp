@@ -1,7 +1,6 @@
 package com.example.instaapp.main.add
 
 import android.Manifest
-import android.R
 import android.app.Activity
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE
@@ -17,18 +16,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
+import com.example.instaapp.api.RetrofitBuilder
 import com.example.instaapp.databinding.FragmentAddPostBinding
-import com.example.instaapp.main.home.HomeFragment
+import com.example.instaapp.model.AddPostRequest
+import com.example.instaapp.model.AddPostResponse
+import com.example.instaapp.model.Image
+import com.example.instaapp.utils.toImage
 import com.example.instaapp.utils.toast
 import com.parse.ParseFile
-import com.parse.ParseObject
-import com.parse.ParseUser
 import com.parse.SaveCallback
 import okio.IOException
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.util.*
 
@@ -42,12 +44,14 @@ class AddPostFragment : Fragment(), LocationListener {
         super.onCreate(savedInstanceState)
 
     }
+
     lateinit var ferences: SharedPreferences
     var imageUri: Uri? = null
     var selectedBitmap: Bitmap? = null
     var locationManager: LocationManager? = null
     var currentAddress: String? = null
     var age: String? = null
+    var imageFile : ParseFile ? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,7 +66,7 @@ class AddPostFragment : Fragment(), LocationListener {
 
         ferences = this.requireActivity().getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = ferences.edit()
-        val age = ferences.getString("AGE","")
+        val age = ferences.getString("AGE", "")
 
         binding.pickImageBtn.setOnClickListener {
             openGallery()
@@ -76,7 +80,49 @@ class AddPostFragment : Fragment(), LocationListener {
     }
 
     private fun createPost() {
-        val stream = ByteArrayOutputStream()
+        binding.apply {
+
+
+
+
+
+            val postRequest = AddPostRequest()
+            postRequest.location = currentAddress.toString()
+            postRequest.title = editPostTitle.text.toString().trim()
+            postRequest.description = editPostDesc.text.toString().trim()
+            postRequest.userId = age.toString()
+            postRequest.image = imageFile?.toImage()
+            Log.d("imageee",postRequest.image?.url.toString())
+
+
+
+            val response = RetrofitBuilder.api.createPost(postRequest)
+            response.enqueue(object : Callback<AddPostResponse> {
+                override fun onResponse(
+                    call: Call<AddPostResponse>,
+                    response: Response<AddPostResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        toast("Post is created")
+                        editPostTitle.text.clear()
+                        editPostDesc.text.clear()
+                        postImage.setImageResource(0)
+                        locationTxt.text = ""
+                    }
+                }
+
+                override fun onFailure(call: Call<AddPostResponse>, t: Throwable) {
+                    toast("Post is not created")
+                    Log.d("Post", t.message.toString())
+                }
+
+            })
+
+        }
+
+
+        /* по парсу отправка
+         val stream = ByteArrayOutputStream()
         selectedBitmap?.compress(Bitmap.CompressFormat.PNG,100,stream)
         val byteArray = stream.toByteArray()
         val parseFile = ParseFile("postImage.png",byteArray)
@@ -104,20 +150,27 @@ class AddPostFragment : Fragment(), LocationListener {
                 Log.i("error", "" + e.message)
             }
         }
+         */
+
     }
 
     private fun getMyLocation() {
         try {
             locationManager =
                 requireActivity().applicationContext.getSystemService(LOCATION_SERVICE) as LocationManager
-            if (ActivityCompat.checkSelfPermission(requireActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            if (ActivityCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                     requireContext(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
-                ActivityCompat.requestPermissions(requireActivity(),
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    1)
+                    1
+                )
                 return
             }
             locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
@@ -149,14 +202,23 @@ class AddPostFragment : Fragment(), LocationListener {
             }
 
 
-            imageUri?.let { uploadImage(it) }
+            uploadImage()
+
         }
     }
 
 
-    private fun uploadImage(uri: Uri) {
-        val data = "Working at Parse is great!".toByteArray()
-        val file = ParseFile("resume.txt", data)
+    private fun uploadImage() {
+        val stream = ByteArrayOutputStream()
+        selectedBitmap?.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val byteArray = stream.toByteArray()
+        val parseFile = ParseFile("postImage.png", byteArray)
+        parseFile.saveInBackground(SaveCallback { e ->
+            if (e == null) {
+                toast("image save")
+                imageFile = parseFile
+            }
+        })
     }
 
     override fun onLocationChanged(location: Location) {
